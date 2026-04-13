@@ -1,0 +1,14 @@
+{
+  "servers": {
+    "mi-mcp-docker": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "--rm",
+        "-i",
+        "mcp/mi-servidor:latest"
+      ]
+    }
+  }
+}
