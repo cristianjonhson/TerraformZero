@@ -17,8 +17,8 @@
         "-e",
         "PROJECT_ROOT=/workspace",
         "hashicorp/terraform-mcp-server",
-        "--toolset=registry.terraform.io/hashicorp/terraform:1.5.0",
-        "stdio"
+        "--toolsets=registry",
+        "stdio",
       ]
     }
   }
