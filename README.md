@@ -5,7 +5,7 @@
 ![Docker](https://img.shields.io/badge/Docker-MCP%20Runtime-2496ED?logo=docker&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Base%20Template-2E7D32)
 
-Plantilla base de Infraestructura como Codigo (IaC) con Terraform para entornos locales. El proyecto usa `terraform-provider-local` para crear recursos en filesystem y agrega una configuracion MCP en Docker con controles de seguridad y limites de recursos.
+Plantilla base de Infraestructura como Codigo (IaC) con Terraform para entornos locales. El proyecto usa `terraform-provider-local` para crear recursos en filesystem y agrega una configuracion MCP en Docker para ejecutar el servidor oficial de Terraform.
 
 ## Tabla de contenidos
 
@@ -32,7 +32,7 @@ Objetivos principales:
 
 - Estandarizar comandos Terraform basicos (`init`, `fmt`, `validate`, `plan`, `apply`, `destroy`).
 - Mantener una base reproducible para evolucionar a modulos y ambientes.
-- Proveer una configuracion MCP portable con Docker y buenas practicas de hardening.
+- Proveer una configuracion MCP portable con Docker para integraciones locales.
 
 ## 2. Alcance
 
@@ -81,7 +81,7 @@ Nota: `.terraform/`, `*.tfstate` y artefactos locales estan fuera de control de 
 
 1. Terraform instalado y disponible en PATH.
 2. Docker instalado y daemon en ejecucion.
-3. (Opcional) credenciales en `~/.aws` para workloads MCP que requieran AWS.
+3. VS Code con soporte MCP (opcional, para consumir `.vscode/mcp.json`).
 
 Validaciones rapidas:
 
@@ -149,31 +149,28 @@ Flujo recomendado para cambios:
 
 ## 9. MCP en Docker
 
-El servidor MCP en `.vscode/mcp.json` esta preparado con:
+El archivo `.vscode/mcp.json` define un servidor MCP llamado `terraform` bajo la clave `mcp.servers`.
 
-- Montaje del workspace en `/workspace`.
-- Montaje de `~/.aws` en modo read-only.
-- Red explicita (`bridge`).
-- Flags de hardening:
-	- `--read-only`
-	- `--tmpfs /tmp:rw,noexec,nosuid,size=64m`
-	- `--cap-drop ALL`
-	- `--security-opt no-new-privileges:true`
-- Limites operativos:
-	- `--cpus 1.0`
-	- `--memory 512m`
-	- `--pids-limit 256`
+Configuracion actual:
 
-Actualizar la imagen `mcp/mi-servidor:latest` por la imagen oficial de tu plataforma.
+- Comando de ejecucion: `docker`
+- Imagen: `hashicorp/terraform-mcp-server`
+- Modo: `docker run -i --rm`
+- Montaje del workspace: `${workspaceFolder}:/workspace`
+- Directorio de trabajo en contenedor: `/workspace`
+- Variables de entorno:
+  - `MCP_LOG_LEVEL=info`
+  - `PROJECT_ROOT=/workspace`
+
+Esta configuracion esta enfocada en simplicidad para desarrollo local y pruebas rapidas.
 
 ## 10. Seguridad y cumplimiento
 
 Lineamientos aplicados:
 
 - No se versionan estados Terraform ni secretos locales.
-- Las credenciales se montan como volumen read-only.
-- El contenedor MCP opera con privilegios reducidos.
 - Se recomienda revisar periodicamente versiones de provider e imagen Docker.
+- El servidor MCP se ejecuta en contenedor efimero (`--rm`) para mantener entornos limpios.
 
 Recomendaciones siguientes:
 
