@@ -1,23 +1,23 @@
 {
-  "mcp": {
-    "servers": {
-      "terraform": {
-        "command": "docker",
-        "args": [
-          "run",
-          "-i",
-          "--rm",
-          "-v",
-          "${workspaceFolder}:/workspace",
-          "-w",
-          "/workspace",
-          "-e",
-          "MCP_LOG_LEVEL=info",
-          "-e",
-          "PROJECT_ROOT=/workspace",
-          "hashicorp/terraform-mcp-server"
-        ]
-      }
+  "servers": {
+    "terraform": {
+      "name": "Terraform MCP Server",
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "-v",
+        "${workspaceFolder}:/workspace",
+        "-w",
+        "/workspace",
+        "-e",
+        "MCP_LOG_LEVEL=info",
+        "-e",
+        "PROJECT_ROOT=/workspace",
+        "hashicorp/terraform-mcp-server"
+      ]
     }
   }
 }
