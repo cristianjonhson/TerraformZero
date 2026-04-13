@@ -1,7 +1,6 @@
 {
   "servers": {
     "terraform": {
-      "name": "Terraform MCP Server",
       "type": "stdio",
       "command": "docker",
       "args": [
@@ -13,12 +12,12 @@
         "-w",
         "/workspace",
         "-e",
-        "MCP_LOG_LEVEL=info",
+        "MCP_LOG_LEVEL=warn",
         "-e",
         "PROJECT_ROOT=/workspace",
         "hashicorp/terraform-mcp-server",
         "--toolsets=registry",
-        "stdio",
+        "stdio"
       ]
     }
   }
