@@ -149,17 +149,19 @@ Flujo recomendado para cambios:
 
 ## 9. MCP en Docker
 
-El archivo `.vscode/mcp.json` define un servidor MCP llamado `terraform` bajo la clave `mcp.servers`.
+El archivo `.vscode/mcp.json` define un servidor MCP llamado `terraform-local` bajo la clave `servers`.
 
 Configuracion actual:
 
 - Comando de ejecucion: `docker`
 - Imagen: `hashicorp/terraform-mcp-server`
 - Modo: `docker run -i --rm`
+- Nombre explicito del contenedor: `terraform-mcp-local`
 - Montaje del workspace: `${workspaceFolder}:/workspace`
 - Directorio de trabajo en contenedor: `/workspace`
+- Toolset habilitado: `registry` (`--toolsets=registry`)
 - Variables de entorno:
-  - `MCP_LOG_LEVEL=info`
+	- `MCP_LOG_LEVEL=warn`
   - `PROJECT_ROOT=/workspace`
 
 Esta configuracion esta enfocada en simplicidad para desarrollo local y pruebas rapidas.
