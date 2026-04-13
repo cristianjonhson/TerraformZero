@@ -1,22 +1,15 @@
 {
-  "servers": {
-    "mi-mcp-docker": {
-      "type": "stdio",
-      "command": "docker",
-      "args": [
-        "run",
-        "--rm",
-        "-i",
-        "-v",
-        "${workspaceFolder}:/workspace",
-        "-w",
-        "/workspace",
-        "-e",
-        "MCP_LOG_LEVEL=info",
-        "-e",
-        "PROJECT_ROOT=/workspace",
-        "mcp/mi-servidor:latest"
-      ]
+  "mcp": {
+    "servers": {
+      "terraform": {
+        "command": "docker",
+        "args": [
+          "run",
+          "-i",
+          "--rm",
+          "hashicorp/terraform-mcp-server"
+        ]
+      }
     }
   }
 }
