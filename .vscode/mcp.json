@@ -1,6 +1,6 @@
 {
   "servers": {
-    "terraform": {
+    "terraform-local": {
       "type": "stdio",
       "command": "docker",
       "args": [
