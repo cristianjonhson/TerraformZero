@@ -166,6 +166,24 @@ Configuracion actual:
 
 Esta configuracion esta enfocada en simplicidad para desarrollo local y pruebas rapidas.
 
+Como se levanta el MCP con esta configuracion:
+
+1. Asegura Docker activo (Docker Desktop o daemon en ejecucion).
+2. Si editaste `.vscode/mcp.json`, recarga VS Code con `Developer: Reload Window`.
+3. En uso normal con Copilot, no necesitas iniciarlo manualmente: se ejecuta bajo demanda.
+
+Comando manual para probarlo desde la raiz del repo:
+
+```bash
+docker run -i --rm --name terraform-mcp-local -v "$PWD:/workspace" -w /workspace -e MCP_LOG_LEVEL=warn -e PROJECT_ROOT=/workspace hashicorp/terraform-mcp-server --toolsets=registry stdio
+```
+
+Notas rapidas:
+
+- El proceso queda en primer plano esperando comunicacion por stdin/stdout (modo `stdio`).
+- Si no arranca, prueba primero: `docker pull hashicorp/terraform-mcp-server`.
+- Al usar `--rm`, el contenedor se elimina automaticamente al finalizar.
+
 ## 10. Seguridad y cumplimiento
 
 Lineamientos aplicados:
