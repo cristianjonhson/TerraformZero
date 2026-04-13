@@ -1,195 +1,235 @@
 # TerraformZero
 
-Proyecto base para practicar y documentar infraestructura como codigo (IaC) con Terraform, usando `terraform-provider-local` para generar recursos locales de forma sencilla y reproducible.
+![Terraform](https://img.shields.io/badge/Terraform-%3E%3D1.5-623CE4?logo=terraform&logoColor=white)
+![Provider](https://img.shields.io/badge/Provider-hashicorp%2Flocal-0A7B83)
+![Docker](https://img.shields.io/badge/Docker-MCP%20Runtime-2496ED?logo=docker&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Base%20Template-2E7D32)
 
-Tambien incluye una configuracion de servidor MCP en Docker para integraciones locales desde VS Code.
+Plantilla base de Infraestructura como Codigo (IaC) con Terraform para entornos locales. El proyecto usa `terraform-provider-local` para crear recursos en filesystem y agrega una configuracion MCP en Docker con controles de seguridad y limites de recursos.
 
-## Descripcion
+## Tabla de contenidos
 
-Este repositorio implementa una infraestructura minima que:
+- [1. Resumen ejecutivo](#1-resumen-ejecutivo)
+- [2. Alcance](#2-alcance)
+- [3. Stack tecnologico](#3-stack-tecnologico)
+- [4. Estructura del repositorio](#4-estructura-del-repositorio)
+- [5. Requisitos](#5-requisitos)
+- [6. Configuracion](#6-configuracion)
+- [7. Ejecucion paso a paso](#7-ejecucion-paso-a-paso)
+- [8. Operacion diaria](#8-operacion-diaria)
+- [9. MCP en Docker](#9-mcp-en-docker)
+- [10. Seguridad y cumplimiento](#10-seguridad-y-cumplimiento)
+- [11. Convenciones de contribucion](#11-convenciones-de-contribucion)
+- [12. Troubleshooting](#12-troubleshooting)
+- [13. Roadmap](#13-roadmap)
+- [14. Licencia](#14-licencia)
 
-- Configura Terraform y el proveedor `hashicorp/local`.
-- Crea un archivo local con contenido dinamico (`local_file`).
-- Expone outputs para validar ruta y contenido generado.
-- Incluye configuracion MCP endurecida para correr un servidor via Docker.
+## 1. Resumen ejecutivo
 
-Es ideal como plantilla de inicio para:
+TerraformZero permite validar un flujo IaC end-to-end sin depender de un proveedor cloud.
 
-- Aprender flujo Terraform (`init`, `plan`, `apply`, `destroy`).
-- Entender estructura basica de un proyecto IaC.
-- Probar integraciones locales antes de pasar a proveedores cloud.
+Objetivos principales:
 
-## Tecnologias
+- Estandarizar comandos Terraform basicos (`init`, `fmt`, `validate`, `plan`, `apply`, `destroy`).
+- Mantener una base reproducible para evolucionar a modulos y ambientes.
+- Proveer una configuracion MCP portable con Docker y buenas practicas de hardening.
+
+## 2. Alcance
+
+Incluido:
+
+- Configuracion de Terraform `>= 1.5.0`.
+- Provider `hashicorp/local`.
+- Recurso `local_file` con contenido dinamico.
+- Outputs de validacion.
+- `.gitignore` orientado a Terraform.
+- Configuracion MCP en `.vscode/mcp.json`.
+
+No incluido en esta fase:
+
+- Backend remoto de estado.
+- Modulos reutilizables por dominio.
+- Pipelines CI/CD.
+
+## 3. Stack tecnologico
 
 - Terraform >= 1.5.0
-- Provider: `hashicorp/local` (~> 2.5)
-- Docker (para el servidor MCP)
-- VS Code (opcional, para uso de `.vscode/mcp.json`)
+- Provider `hashicorp/local` `~> 2.5`
+- Docker (runtime del servidor MCP)
+- VS Code (consumo de configuracion MCP)
 
-## Estructura Del Proyecto
+## 4. Estructura del repositorio
 
 ```text
 TerraformZero/
-├── .gitignore
-├── .vscode/
-│   └── mcp.json
-├── infra/
-│   ├── main.tf
-│   ├── output.tf
-│   ├── provider.tf
-│   ├── variables.tf
-│   ├── .terraform.lock.hcl
-│   └── generated/
-└── README.md
+|-- .gitignore
+|-- .vscode/
+|   `-- mcp.json
+|-- infra/
+|   |-- main.tf
+|   |-- output.tf
+|   |-- provider.tf
+|   |-- variables.tf
+|   |-- .terraform.lock.hcl
+|   `-- generated/
+`-- README.md
 ```
 
-Nota: directorios/archivos de estado como `.terraform/` y `*.tfstate` son temporales y estan ignorados por Git.
+Nota: `.terraform/`, `*.tfstate` y artefactos locales estan fuera de control de versiones.
 
-## Requisitos
+## 5. Requisitos
 
-Antes de ejecutar, verifica:
+1. Terraform instalado y disponible en PATH.
+2. Docker instalado y daemon en ejecucion.
+3. (Opcional) credenciales en `~/.aws` para workloads MCP que requieran AWS.
 
-1. Terraform instalado:
+Validaciones rapidas:
 
 ```bash
 terraform version
-```
-
-2. Docker instalado (si vas a usar MCP):
-
-```bash
 docker --version
 ```
 
-3. (Opcional) Credenciales AWS en `~/.aws` si tu contenedor MCP las necesita.
+## 6. Configuracion
 
-## Configuracion Terraform
+Variables declaradas en `infra/variables.tf`:
 
-Variables disponibles en `infra/variables.tf`:
+- `project_name` (string, default `TerraformZero`)
+- `output_file` (string, default `generated/hola.txt`)
 
-- `project_name` (string, default: `TerraformZero`): nombre del proyecto.
-- `output_file` (string, default: `generated/hola.txt`): ruta del archivo local a generar.
-
-Puedes sobreescribir variables por CLI:
+Sobrescritura por CLI:
 
 ```bash
 terraform apply -var="project_name=Demo" -var="output_file=generated/demo.txt"
 ```
 
-O usando archivo `*.tfvars` (recomendado para ambientes):
+Sobrescritura por archivo tfvars:
 
 ```bash
 terraform apply -var-file="dev.tfvars"
 ```
 
-## Como Ejecutarlo
+## 7. Ejecucion paso a paso
 
-Desde la raiz del repo:
-
-1. Entrar al directorio de infraestructura:
+Desde la raiz del repositorio:
 
 ```bash
 cd infra
-```
-
-2. Formatear archivos:
-
-```bash
 terraform fmt
-```
-
-3. Inicializar proveedores:
-
-```bash
 terraform init
-```
-
-4. Validar configuracion:
-
-```bash
 terraform validate
-```
-
-5. Ver plan de cambios:
-
-```bash
 terraform plan
-```
-
-6. Aplicar cambios:
-
-```bash
 terraform apply
-```
-
-7. Ver outputs:
-
-```bash
 terraform output
 ```
 
-8. Destruir recursos:
+Para limpieza:
 
 ```bash
 terraform destroy
 ```
 
-## Resultado Esperado
+Resultado esperado tras `apply`:
 
-Al aplicar la infraestructura se genera un archivo local (por defecto `infra/generated/hola.txt`) con contenido similar a:
+- Archivo generado en `infra/generated/hola.txt` (o la ruta definida en `output_file`).
+- Outputs disponibles:
+	- `generated_file_path`
+	- `generated_file_content`
 
-```text
-Proyecto: TerraformZero
-Generado por: terraform-provider-local
-Fecha: 2026-04-13T00:00:00Z
-```
+## 8. Operacion diaria
 
-Ademas, `terraform output` devolvera:
+Flujo recomendado para cambios:
 
-- `generated_file_path`
-- `generated_file_content`
+1. Crear branch de trabajo.
+2. Editar archivos en `infra/`.
+3. Ejecutar `terraform fmt` y `terraform validate`.
+4. Revisar `terraform plan`.
+5. Aplicar cambios cuando corresponda.
+6. Documentar impacto en este README si cambia comportamiento.
 
-## Configuracion MCP Con Docker
+## 9. MCP en Docker
 
-El archivo `.vscode/mcp.json` define un servidor MCP con:
+El servidor MCP en `.vscode/mcp.json` esta preparado con:
 
-- Ejecucion por `docker run`.
 - Montaje del workspace en `/workspace`.
-- Montaje de `~/.aws` en modo solo lectura.
+- Montaje de `~/.aws` en modo read-only.
 - Red explicita (`bridge`).
-- Flags de seguridad (`--read-only`, `--cap-drop ALL`, `no-new-privileges`).
-- Limites de recursos (`--cpus`, `--memory`, `--pids-limit`).
+- Flags de hardening:
+	- `--read-only`
+	- `--tmpfs /tmp:rw,noexec,nosuid,size=64m`
+	- `--cap-drop ALL`
+	- `--security-opt no-new-privileges:true`
+- Limites operativos:
+	- `--cpus 1.0`
+	- `--memory 512m`
+	- `--pids-limit 256`
 
-Recuerda reemplazar la imagen `mcp/mi-servidor:latest` por la que corresponda en tu entorno.
+Actualizar la imagen `mcp/mi-servidor:latest` por la imagen oficial de tu plataforma.
 
-## Buenas Practicas
+## 10. Seguridad y cumplimiento
 
-- No versionar estados locales (`*.tfstate`) en Git.
-- Mantener `terraform fmt` y `terraform validate` en tu flujo.
-- Evitar credenciales hardcodeadas en archivos `.tf`.
-- Usar `*.tfvars` por ambiente (`dev`, `qa`, `prod`).
-- Revisar siempre `terraform plan` antes de `apply`.
+Lineamientos aplicados:
 
-## Troubleshooting
+- No se versionan estados Terraform ni secretos locales.
+- Las credenciales se montan como volumen read-only.
+- El contenedor MCP opera con privilegios reducidos.
+- Se recomienda revisar periodicamente versiones de provider e imagen Docker.
 
-1. Error al descargar provider:
-- Ejecuta `terraform init -upgrade` y revisa conectividad a registry.
+Recomendaciones siguientes:
 
-2. El archivo no aparece en `generated/`:
-- Verifica `output_file` y que ejecutaste `terraform apply` en `infra/`.
+- Mover estado a backend remoto para trabajo colaborativo.
+- Incorporar escaneo de IaC en CI.
+- Definir politica de rotacion de credenciales.
 
-3. Problemas con Docker en MCP:
-- Confirma permisos del daemon Docker.
-- Verifica que la imagen exista localmente o en registry.
-- Ajusta paths de volumen si cambiaste estructura del proyecto.
+## 11. Convenciones de contribucion
 
-## Roadmap Sugerido
+Branching:
 
-- Agregar ambientes con `dev.tfvars`, `prod.tfvars`.
-- Separar en modulos reutilizables.
-- Integrar checks en CI (`fmt`, `validate`, `plan`).
-- Migrar luego a un proveedor cloud (AWS/Azure/GCP) manteniendo la misma base.
+- `main`: rama estable.
+- `feature/<nombre-corto>`: nuevas capacidades.
+- `fix/<nombre-corto>`: correcciones.
 
-## Licencia
+Commits (convencion sugerida):
 
-Uso interno o educativo. Ajusta esta seccion segun las politicas de tu organizacion.
+- `feat: descripcion breve`
+- `fix: descripcion breve`
+- `docs: descripcion breve`
+- `chore: descripcion breve`
+
+Checklist para Pull Request:
+
+- [ ] README actualizado si hay cambios funcionales.
+- [ ] `terraform fmt` ejecutado.
+- [ ] `terraform validate` en verde.
+- [ ] `terraform plan` revisado.
+- [ ] Sin credenciales ni archivos de estado en el diff.
+
+## 12. Troubleshooting
+
+1. Provider no descarga:
+
+- Ejecutar `terraform init -upgrade`.
+- Validar salida a internet hacia Terraform Registry.
+
+2. No se genera el archivo local:
+
+- Confirmar ruta de `output_file`.
+- Ejecutar desde `infra/`.
+- Verificar que `terraform apply` termino sin errores.
+
+3. Fallo del contenedor MCP:
+
+- Revisar que Docker daemon este activo.
+- Confirmar existencia de la imagen configurada.
+- Validar rutas de volumen en host.
+
+## 13. Roadmap
+
+- Agregar archivos `dev.tfvars`, `qa.tfvars`, `prod.tfvars`.
+- Separar logica en modulos.
+- Integrar pipeline CI para `fmt`, `validate`, `plan`.
+- Migrar a provider cloud manteniendo convenciones del repositorio.
+
+## 14. Licencia
+
+Uso interno o educativo. Ajustar segun normativa de la organizacion.
