@@ -1,0 +1,26 @@
+{
+  "servers": {
+    "terraform-local": {
+      "type": "stdio",
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--name",
+        "terraform-mcp-local",
+        "-v",
+        "${workspaceFolder}:/workspace",
+        "-w",
+        "/workspace",
+        "-e",
+        "MCP_LOG_LEVEL=warn",
+        "-e",
+        "PROJECT_ROOT=/workspace",
+        "hashicorp/terraform-mcp-server",
+        "--toolsets=registry",
+        "stdio"
+      ]
+    }
+  }
+}
