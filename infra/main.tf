@@ -9,7 +9,6 @@ locals {
 	Proyecto: ${var.project_name}
 	Sufijo aleatorio: ${random_pet.project_suffix.id}
 	Generado por: terraform-provider-local
-	Fecha: ${timestamp()}
 	EOT
 }
 
