@@ -23,7 +23,6 @@ override.tf.json
 terraform.rc
 
 # Variable definition files (often contain secrets)
-*.tfvars
 *.tfvars.json
 !*.tfvars.example
 
