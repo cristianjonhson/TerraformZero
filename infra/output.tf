@@ -8,3 +8,8 @@ output "generated_file_content" {
   description = "Contenido generado en el archivo local."
   value       = local_file.example.content
 }
+
+output "random_pet_suffix" {
+  description = "Sufijo aleatorio generado por el provider hashicorp/random."
+  value       = random_pet.project_suffix.id
+}
