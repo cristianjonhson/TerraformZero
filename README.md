@@ -148,7 +148,6 @@ generated_file_content = <<EOT
 Proyecto: TerraformZero
 Sufijo aleatorio: live-snapper
 Generado por: terraform-provider-local
-Fecha: 2026-04-25T16:30:33Z
 
 EOT
 generated_file_path = "generated/hola.txt"
@@ -161,10 +160,9 @@ Ejemplo real del archivo generado (`infra/generated/hola.txt`):
 Proyecto: TerraformZero
 Sufijo aleatorio: live-snapper
 Generado por: terraform-provider-local
-Fecha: 2026-04-25T16:30:33Z
 ```
 
-Nota: el valor de `random_pet_suffix` y la fecha cambian en cada `terraform apply`.
+Nota: el valor de `random_pet_suffix` cambia solo cuando el recurso aleatorio se vuelve a crear.
 
 ## 8. Operacion diaria
 
