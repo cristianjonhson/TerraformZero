@@ -126,6 +126,15 @@ Uso de `infra/variables.tf` y `infra/terraform.tfvars`:
 - `infra/variables.tf` define el esquema de variables (nombre, tipo y default).
 - `infra/terraform.tfvars` define valores concretos para ejecucion local.
 
+Ejemplo del archivo `infra/terraform.tfvars`:
+
+```hcl
+project_name      = "TerraformZero"
+output_file       = "generated/hola.txt"
+random_pet_length = 2
+generated_folder  = "generated/artifacts"
+```
+
 Nota: Terraform carga `terraform.tfvars` automaticamente cuando ejecutas comandos desde `infra/`.
 
 Ejemplo explicito de ejecucion con ese archivo:
