@@ -128,6 +128,16 @@ terraform apply -auto-approve
 terraform output
 ```
 
+Nota sobre `terraform plan`:
+
+- Si no usas `-out`, Terraform no garantiza que `terraform apply` ejecute exactamente las mismas acciones mostradas por el plan.
+- Para un flujo reproducible, usa:
+
+```bash
+terraform plan -out=tfplan
+terraform apply tfplan
+```
+
 Para limpieza:
 
 ```bash
