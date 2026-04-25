@@ -1,7 +1,13 @@
+# Recurso aleatorio para generar un sufijo reutilizable en nombres o etiquetas.
+resource "random_pet" "project_suffix" {
+  length = var.random_pet_length
+}
+
 # Contenido que Terraform escribira en el archivo local en cada apply.
 locals {
   generated_content = <<-EOT
 	Proyecto: ${var.project_name}
+	Sufijo aleatorio: ${random_pet.project_suffix.id}
 	Generado por: terraform-provider-local
 	Fecha: ${timestamp()}
 	EOT
