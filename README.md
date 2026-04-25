@@ -65,6 +65,14 @@ No incluido en esta fase:
 ```text
 TerraformZero/
 |-- .gitignore
+|-- .github/
+|   |-- copilot-instructions.md
+|   |-- agents/
+|   |   `-- crear-terraform.agent.md
+|   |-- instructions/
+|   |   `-- terraform.instructions.md
+|   `-- prompts/
+|       `-- crear-terraform.prompt.md
 |-- .vscode/
 |   `-- mcp.json
 |-- infra/
@@ -321,13 +329,15 @@ Checklist para Pull Request:
 
 El repositorio incluye personalizaciones para acelerar tareas Terraform en VS Code:
 
+- Instrucciones de archivo: `.github/instructions/terraform.instructions.md` (aplicadas automaticamente a `infra/**/*.tf`)
 - Prompt de workspace: `.github/prompts/crear-terraform.prompt.md`
 - Agente de workspace: `.github/agents/crear-terraform.agent.md`
 
 Uso sugerido:
 
-1. Usa el prompt `crear-terraform` para generar cambios basicos en `infra/`.
-2. Usa el agente `Crear Terraform` cuando quieras ejecutar un flujo guiado con restricciones del repo.
+1. Las instrucciones de Terraform se aplican automaticamente al editar archivos `.tf` en `infra/`.
+2. Usa el prompt `crear-terraform` para generar cambios basicos en `infra/`.
+3. Usa el agente `Crear Terraform` cuando quieras ejecutar un flujo guiado con restricciones del repo.
 
 Ambos siguen estas reglas:
 
