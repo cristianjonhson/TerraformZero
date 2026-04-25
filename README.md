@@ -348,6 +348,19 @@ Uso sugerido:
 2. Usa el prompt `crear-terraform` para generar cambios basicos en `infra/`.
 3. Usa el agente `Crear Terraform` cuando quieras ejecutar un flujo guiado con restricciones del repo.
 
+Como invocar el prompt desde VS Code:
+
+1. Abre el panel de Copilot Chat (`Ctrl+Alt+I` / `Cmd+Alt+I`).
+2. Escribe `/` en el campo de entrada: aparecera la lista de prompts disponibles.
+3. Selecciona `crear-terraform` o escribe `/crear-terraform` directamente.
+4. Describe el cambio que necesitas, por ejemplo:
+
+```
+/crear-terraform agrega un recurso local_file que genere un archivo README.txt en generated/
+```
+
+5. Copilot ejecutara el flujo del agente con las restricciones del repo aplicadas.
+
 Ambos siguen estas reglas:
 
 - Cambios limitados a `infra/` (salvo solicitud explicita).
