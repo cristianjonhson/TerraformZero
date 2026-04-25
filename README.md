@@ -112,6 +112,19 @@ Sobrescritura por archivo tfvars:
 terraform apply -var-file="dev.tfvars"
 ```
 
+Uso de `infra/variables.tf` y `infra/terraform.tfvars`:
+
+- `infra/variables.tf` define el esquema de variables (nombre, tipo y default).
+- `infra/terraform.tfvars` define valores concretos para ejecucion local.
+
+Ejemplo explicito de ejecucion con ese archivo:
+
+```bash
+cd infra
+terraform plan -var-file="terraform.tfvars"
+terraform apply -var-file="terraform.tfvars"
+```
+
 ## 7. Ejecucion paso a paso
 
 Desde la raiz del repositorio:
