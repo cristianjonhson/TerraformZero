@@ -10,3 +10,9 @@ variable "project_name" {
   type        = string
   default     = "TerraformZero"
 }
+
+variable "random_pet_length" {
+  description = "Cantidad de palabras usadas por random_pet para generar el sufijo."
+  type        = number
+  default     = 2
+}
