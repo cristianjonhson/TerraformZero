@@ -18,3 +18,9 @@ resource "local_file" "example" {
   filename = var.output_file
   content  = local.generated_content
 }
+
+# Crea una carpeta adicional manteniendo un archivo marcador dentro de ella.
+resource "local_file" "generated_folder_marker" {
+  filename = "${var.generated_folder}/.gitkeep"
+  content  = ""
+}
