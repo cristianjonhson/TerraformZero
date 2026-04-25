@@ -123,6 +123,8 @@ terraform init
 terraform validate
 terraform plan
 terraform apply
+# Opcional para ejecucion no interactiva:
+terraform apply -auto-approve
 terraform output
 ```
 
@@ -130,6 +132,8 @@ Para limpieza:
 
 ```bash
 terraform destroy
+# Opcional para ejecucion no interactiva:
+terraform destroy -auto-approve
 ```
 
 Resultado esperado tras `apply`:
