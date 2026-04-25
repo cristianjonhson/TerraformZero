@@ -154,6 +154,18 @@ generated_file_path = "generated/hola.txt"
 random_pet_suffix = "live-snapper"
 ```
 
+Para ver el contenido sin formato heredoc:
+
+```bash
+terraform output -raw generated_file_content
+```
+
+Para ver todos los outputs en formato JSON:
+
+```bash
+terraform output -json
+```
+
 Ejemplo real del archivo generado (`infra/generated/hola.txt`):
 
 ```text
