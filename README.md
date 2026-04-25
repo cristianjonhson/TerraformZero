@@ -98,6 +98,7 @@ Variables declaradas en `infra/variables.tf`:
 - `project_name` (string, default `TerraformZero`)
 - `output_file` (string, default `generated/hola.txt`)
 - `random_pet_length` (number, default `2`)
+- `generated_folder` (string, default `generated/artifacts`)
 
 Sobrescritura por CLI:
 
@@ -138,6 +139,7 @@ Resultado esperado tras `apply`:
 	- `generated_file_path`
 	- `generated_file_content`
 	- `random_pet_suffix`
+	- `generated_folder_path`
 
 Ejemplo real de `terraform output`:
 
