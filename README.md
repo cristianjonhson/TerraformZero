@@ -1,11 +1,11 @@
 # TerraformZero
 
 ![Terraform](https://img.shields.io/badge/Terraform-%3E%3D1.5-623CE4?logo=terraform&logoColor=white)
-![Provider](https://img.shields.io/badge/Provider-hashicorp%2Flocal-0A7B83)
+![Providers](https://img.shields.io/badge/Providers-hashicorp%2Flocal%20%7C%20hashicorp%2Frandom-0A7B83)
 ![Docker](https://img.shields.io/badge/Docker-MCP%20Runtime-2496ED?logo=docker&logoColor=white)
 ![Status](https://img.shields.io/badge/Status-Base%20Template-2E7D32)
 
-Plantilla base de Infraestructura como Codigo (IaC) con Terraform para entornos locales. El proyecto usa `terraform-provider-local` para crear recursos en filesystem y agrega una configuracion MCP en Docker para ejecutar el servidor oficial de Terraform.
+Plantilla base de Infraestructura como Codigo (IaC) con Terraform para entornos locales. El proyecto usa `terraform-provider-local` para crear archivos en filesystem, `hashicorp/random` para generar sufijos aleatorios reutilizables y agrega una configuracion MCP en Docker para ejecutar el servidor oficial de Terraform.
 
 ## Tabla de contenidos
 
@@ -39,8 +39,8 @@ Objetivos principales:
 Incluido:
 
 - Configuracion de Terraform `>= 1.5.0`.
-- Provider `hashicorp/local`.
-- Recurso `local_file` con contenido dinamico.
+- Providers `hashicorp/local` y `hashicorp/random`.
+- Recursos `local_file` y `random_pet` con contenido dinamico.
 - Outputs de validacion.
 - `.gitignore` orientado a Terraform.
 - Configuracion MCP en `.vscode/mcp.json`.
@@ -55,6 +55,7 @@ No incluido en esta fase:
 
 - Terraform >= 1.5.0
 - Provider `hashicorp/local` `~> 2.5`
+- Provider `hashicorp/random` `~> 3.0`
 - Docker (runtime del servidor MCP)
 - VS Code (consumo de configuracion MCP)
 
@@ -96,6 +97,7 @@ Variables declaradas en `infra/variables.tf`:
 
 - `project_name` (string, default `TerraformZero`)
 - `output_file` (string, default `generated/hola.txt`)
+- `random_pet_length` (number, default `2`)
 
 Sobrescritura por CLI:
 
@@ -135,6 +137,7 @@ Resultado esperado tras `apply`:
 - Outputs disponibles:
 	- `generated_file_path`
 	- `generated_file_content`
+	- `random_pet_suffix`
 
 ## 8. Operacion diaria
 
