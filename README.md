@@ -22,7 +22,8 @@ Plantilla base de Infraestructura como Codigo (IaC) con Terraform para entornos 
 - [11. Convenciones de contribucion](#11-convenciones-de-contribucion)
 - [12. Troubleshooting](#12-troubleshooting)
 - [13. Roadmap](#13-roadmap)
-- [14. Licencia](#14-licencia)
+- [14. Automatizacion con Copilot](#14-automatizacion-con-copilot)
+- [15. Licencia](#15-licencia)
 
 ## 1. Resumen ejecutivo
 
@@ -316,6 +317,25 @@ Checklist para Pull Request:
 - Integrar pipeline CI para `fmt`, `validate`, `plan`.
 - Migrar a provider cloud manteniendo convenciones del repositorio.
 
-## 14. Licencia
+## 14. Automatizacion con Copilot
+
+El repositorio incluye personalizaciones para acelerar tareas Terraform en VS Code:
+
+- Prompt de workspace: `.github/prompts/crear-terraform.prompt.md`
+- Agente de workspace: `.github/agents/crear-terraform.agent.md`
+
+Uso sugerido:
+
+1. Usa el prompt `crear-terraform` para generar cambios basicos en `infra/`.
+2. Usa el agente `Crear Terraform` cuando quieras ejecutar un flujo guiado con restricciones del repo.
+
+Ambos siguen estas reglas:
+
+- Cambios limitados a `infra/` (salvo solicitud explicita).
+- Reutilizar variables existentes antes de hardcodear.
+- Ejecutar validacion en orden: `terraform fmt`, `terraform init` (si aplica), `terraform validate`, `terraform plan`.
+- No incluir secretos en codigo, variables ni outputs.
+
+## 15. Licencia
 
 Uso interno o educativo. Ajustar segun normativa de la organizacion.
