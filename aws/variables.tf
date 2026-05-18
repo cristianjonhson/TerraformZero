@@ -15,3 +15,9 @@ variable "aws_secret_key" {
   type        = string
   default     = "test"
 }
+
+variable "aws_s3_bucket_name" {
+  description = "Nombre del bucket S3 a crear en AWS."
+  type        = string
+  default     = "terraform-zero-bucket-${random_pet.project_suffix.id}"
+}
