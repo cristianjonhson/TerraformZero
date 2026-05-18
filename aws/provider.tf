@@ -7,6 +7,11 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 6.0"
     }
+
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.0"
+    }
   }
 }
 provider "aws" {
@@ -19,4 +24,8 @@ provider "aws" {
   skip_credentials_validation = true
   skip_metadata_api_check     = true
   skip_requesting_account_id  = true
+  endpoints {
+    #   Redirige las llamadas al servicio S3 a un endpoint local, útil para pruebas con herramientas como ministack.
+    s3 = "http://localhost:4566"
+  }
 }
