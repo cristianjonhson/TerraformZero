@@ -11,4 +11,5 @@ terraform {
 }
 provider "aws" {
   #  Configuración del proveedor AWS, como región o credenciales, puede ser definida aquí o a través de variables de entorno.
+  region = "us-east-1"
 }
