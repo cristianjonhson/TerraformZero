@@ -42,6 +42,8 @@ Incluido:
 - Configuracion de Terraform `>= 1.5.0`.
 - Providers `hashicorp/local` y `hashicorp/random`.
 - Recursos `local_file` y `random_pet` con contenido dinamico.
+- Generacion de contenido mas limpio con `trimspace(...)` y salto de linea final controlado.
+- Permisos explicitos en archivos locales mediante `file_permission`.
 - Outputs de validacion.
 - `.gitignore` orientado a Terraform.
 - Configuracion MCP en `.vscode/mcp.json`.
@@ -108,6 +110,12 @@ Variables declaradas en `infra/variables.tf`:
 - `output_file` (string, default `generated/hola.txt`)
 - `random_pet_length` (number, default `2`)
 - `generated_folder` (string, default `generated/artifacts`)
+
+Ajustes recientes en `infra/main.tf`:
+
+- El contenido del archivo generado se normaliza con `trimspace(...)` para evitar espacios sobrantes del heredoc.
+- Se agrega un salto de linea final controlado con `"${local.generated_content}\n"`.
+- El recurso `local_file.example` define `file_permission = "0644"` para dejar permisos explicitos en el archivo generado.
 
 Sobrescritura por CLI:
 
@@ -222,6 +230,12 @@ Generado por: terraform-provider-local
 ```
 
 Nota: el valor de `random_pet_suffix` cambia solo cuando el recurso aleatorio se vuelve a crear.
+
+Nota adicional sobre el cambio reciente en `main.tf`:
+
+- El archivo generado mantiene el mismo contenido funcional, pero ahora se escribe con formato mas limpio y predecible.
+- Se declaran permisos explicitos (`0644`) en el recurso `local_file.example`.
+- Esto mejora legibilidad, trazabilidad y consistencia del resultado entre ejecuciones locales.
 
 ## 8. Operacion diaria
 
