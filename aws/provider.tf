@@ -15,4 +15,8 @@ provider "aws" {
   #provider para conectarse a ministack, se recomienda usar variables de entorno o un gestor de secretos para las claves.
   access_key = var.aws_access_key
   secret_key = var.aws_secret_key
+  # Configuraciones adicionales para evitar validaciones innecesarias en entornos de desarrollo o pruebas. (Exclusivo para ministack o entornos similares, no recomendado para producción)
+  skip_credentials_validation = true
+  skip_metadata_api_check     = true
+  skip_requesting_account_id  = true
 }
