@@ -21,3 +21,9 @@ variable "aws_s3_bucket_name" {
   type        = string
   default     = "terraform-zero-bucket-${random_pet.project_suffix.id}"
 }
+
+variable "env" {
+  description = "Entorno de despliegue, por ejemplo: dev, staging, prod."
+  type        = string
+  default     = "dev"
+}
