@@ -45,3 +45,9 @@ variable "managed_by" {
   type        = string
   default     = "Terraform"
 }
+
+variable "component_name_tag_value" {
+  description = "Valor para la etiqueta 'Component' en AWS, indicando el componente o servicio al que pertenecen los recursos."
+  type        = string
+  default     = "s3"
+}
