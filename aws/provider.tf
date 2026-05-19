@@ -28,7 +28,7 @@ provider "aws" {
 
   # Soluciona el error:
   # bucket.localhost:4566 no such host
-  #s3_use_path_style = true
+  s3_use_path_style = true
   endpoints {
     #   Redirige las llamadas al servicio S3 a un endpoint local, útil para pruebas con herramientas como ministack.
     s3 = "http://localhost:4566"
