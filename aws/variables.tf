@@ -39,3 +39,9 @@ variable "project_name" {
   type        = string
   default     = "TerraformZero"
 }
+
+variable "managed_by" {
+  description = "Valor para la etiqueta 'ManagedBy' en AWS, indicando que los recursos son gestionados por Terraform."
+  type        = string
+  default     = "Terraform"
+}
