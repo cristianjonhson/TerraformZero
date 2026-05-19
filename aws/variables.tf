@@ -33,3 +33,9 @@ variable "random_pet_length" {
   type        = number
   default     = 2
 }
+
+variable "project_name" {
+  description = "Nombre del proyecto para incluirlo en las etiquetas de AWS."
+  type        = string
+  default     = "TerraformZero"
+}
