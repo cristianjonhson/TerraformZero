@@ -9,7 +9,6 @@ locals {
 	Proyecto: ${var.project_name}
 	Sufijo aleatorio: ${random_pet.project_suffix.id}
 	Generado por: terraform-provider-local
-	Fecha: ${timestamp()}
 	EOT
 }
 
@@ -17,4 +16,10 @@ locals {
 resource "local_file" "example" {
   filename = var.output_file
   content  = local.generated_content
+}
+
+# Crea una carpeta adicional manteniendo un archivo marcador dentro de ella.
+resource "local_file" "generated_folder_marker" {
+  filename = "${var.generated_folder}/.gitkeep"
+  content  = ""
 }

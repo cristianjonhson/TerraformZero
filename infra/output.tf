@@ -13,3 +13,8 @@ output "random_pet_suffix" {
   description = "Sufijo aleatorio generado por el provider hashicorp/random."
   value       = random_pet.project_suffix.id
 }
+
+output "generated_folder_path" {
+  description = "Ruta de la carpeta adicional creada por Terraform."
+  value       = dirname(local_file.generated_folder_marker.filename)
+}

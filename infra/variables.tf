@@ -16,3 +16,9 @@ variable "random_pet_length" {
   type        = number
   default     = 2
 }
+
+variable "generated_folder" {
+  description = "Ruta de una carpeta adicional que Terraform mantendra en el filesystem local."
+  type        = string
+  default     = "generated/artifacts"
+}

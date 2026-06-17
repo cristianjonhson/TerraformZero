@@ -22,7 +22,8 @@ Plantilla base de Infraestructura como Codigo (IaC) con Terraform para entornos 
 - [11. Convenciones de contribucion](#11-convenciones-de-contribucion)
 - [12. Troubleshooting](#12-troubleshooting)
 - [13. Roadmap](#13-roadmap)
-- [14. Licencia](#14-licencia)
+- [14. Automatizacion con Copilot](#14-automatizacion-con-copilot)
+- [15. Licencia](#15-licencia)
 
 ## 1. Resumen ejecutivo
 
@@ -64,6 +65,14 @@ No incluido en esta fase:
 ```text
 TerraformZero/
 |-- .gitignore
+|-- .github/
+|   |-- copilot-instructions.md
+|   |-- agents/
+|   |   `-- crear-terraform.agent.md
+|   |-- instructions/
+|   |   `-- terraform.instructions.md
+|   `-- prompts/
+|       `-- crear-terraform.prompt.md
 |-- .vscode/
 |   `-- mcp.json
 |-- infra/
@@ -98,6 +107,7 @@ Variables declaradas en `infra/variables.tf`:
 - `project_name` (string, default `TerraformZero`)
 - `output_file` (string, default `generated/hola.txt`)
 - `random_pet_length` (number, default `2`)
+- `generated_folder` (string, default `generated/artifacts`)
 
 Sobrescritura por CLI:
 
@@ -111,6 +121,30 @@ Sobrescritura por archivo tfvars:
 terraform apply -var-file="dev.tfvars"
 ```
 
+Uso de `infra/variables.tf` y `infra/terraform.tfvars`:
+
+- `infra/variables.tf` define el esquema de variables (nombre, tipo y default).
+- `infra/terraform.tfvars` define valores concretos para ejecucion local.
+
+Ejemplo del archivo `infra/terraform.tfvars`:
+
+```hcl
+project_name      = "TerraformZero"
+output_file       = "generated/hola.txt"
+random_pet_length = 2
+generated_folder  = "generated/artifacts"
+```
+
+Nota: Terraform carga `terraform.tfvars` automaticamente cuando ejecutas comandos desde `infra/`.
+
+Ejemplo explicito de ejecucion con ese archivo:
+
+```bash
+cd infra
+terraform plan -var-file="terraform.tfvars"
+terraform apply -var-file="terraform.tfvars"
+```
+
 ## 7. Ejecucion paso a paso
 
 Desde la raiz del repositorio:
@@ -122,13 +156,27 @@ terraform init
 terraform validate
 terraform plan
 terraform apply
+# Opcional para ejecucion no interactiva:
+terraform apply -auto-approve
 terraform output
+```
+
+Nota sobre `terraform plan`:
+
+- Si no usas `-out`, Terraform no garantiza que `terraform apply` ejecute exactamente las mismas acciones mostradas por el plan.
+- Para un flujo reproducible, usa:
+
+```bash
+terraform plan -out=tfplan
+terraform apply tfplan
 ```
 
 Para limpieza:
 
 ```bash
 terraform destroy
+# Opcional para ejecucion no interactiva:
+terraform destroy -auto-approve
 ```
 
 Resultado esperado tras `apply`:
@@ -138,6 +186,7 @@ Resultado esperado tras `apply`:
 	- `generated_file_path`
 	- `generated_file_content`
 	- `random_pet_suffix`
+	- `generated_folder_path`
 
 Ejemplo real de `terraform output`:
 
@@ -146,11 +195,22 @@ generated_file_content = <<EOT
 Proyecto: TerraformZero
 Sufijo aleatorio: live-snapper
 Generado por: terraform-provider-local
-Fecha: 2026-04-25T16:30:33Z
 
 EOT
 generated_file_path = "generated/hola.txt"
 random_pet_suffix = "live-snapper"
+```
+
+Para ver el contenido sin formato heredoc:
+
+```bash
+terraform output -raw generated_file_content
+```
+
+Para ver todos los outputs en formato JSON:
+
+```bash
+terraform output -json
 ```
 
 Ejemplo real del archivo generado (`infra/generated/hola.txt`):
@@ -159,10 +219,9 @@ Ejemplo real del archivo generado (`infra/generated/hola.txt`):
 Proyecto: TerraformZero
 Sufijo aleatorio: live-snapper
 Generado por: terraform-provider-local
-Fecha: 2026-04-25T16:30:33Z
 ```
 
-Nota: el valor de `random_pet_suffix` y la fecha cambian en cada `terraform apply`.
+Nota: el valor de `random_pet_suffix` cambia solo cuando el recurso aleatorio se vuelve a crear.
 
 ## 8. Operacion diaria
 
@@ -275,6 +334,40 @@ Checklist para Pull Request:
 - Integrar pipeline CI para `fmt`, `validate`, `plan`.
 - Migrar a provider cloud manteniendo convenciones del repositorio.
 
-## 14. Licencia
+## 14. Automatizacion con Copilot
+
+El repositorio incluye personalizaciones para acelerar tareas Terraform en VS Code:
+
+- Instrucciones de archivo: `.github/instructions/terraform.instructions.md` (aplicadas automaticamente a `infra/**/*.tf`)
+- Prompt de workspace: `.github/prompts/crear-terraform.prompt.md`
+- Agente de workspace: `.github/agents/crear-terraform.agent.md`
+
+Uso sugerido:
+
+1. Las instrucciones de Terraform se aplican automaticamente al editar archivos `.tf` en `infra/`.
+2. Usa el prompt `crear-terraform` para generar cambios basicos en `infra/`.
+3. Usa el agente `Crear Terraform` cuando quieras ejecutar un flujo guiado con restricciones del repo.
+
+Como invocar el prompt desde VS Code:
+
+1. Abre el panel de Copilot Chat (`Ctrl+Alt+I` / `Cmd+Alt+I`).
+2. Escribe `/` en el campo de entrada: aparecera la lista de prompts disponibles.
+3. Selecciona `crear-terraform` o escribe `/crear-terraform` directamente.
+4. Describe el cambio que necesitas, por ejemplo:
+
+```
+/crear-terraform agrega un recurso local_file que genere un archivo README.txt en generated/
+```
+
+5. Copilot ejecutara el flujo del agente con las restricciones del repo aplicadas.
+
+Ambos siguen estas reglas:
+
+- Cambios limitados a `infra/` (salvo solicitud explicita).
+- Reutilizar variables existentes antes de hardcodear.
+- Ejecutar validacion en orden: `terraform fmt`, `terraform init` (si aplica), `terraform validate`, `terraform plan`.
+- No incluir secretos en codigo, variables ni outputs.
+
+## 15. Licencia
 
 Uso interno o educativo. Ajustar segun normativa de la organizacion.
